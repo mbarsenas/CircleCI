@@ -1,0 +1,20 @@
+version: 2.1
+jobs:
+  deploy:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: Deploy to Production
+          command: |
+            # Add your deployment commands or scripts here
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only:
+                - main
