@@ -1,21 +1,26 @@
 version: 2.1
+orbs:
+  aws-ec2: circleci/aws-ec2@1.0.0
 jobs:
   deploy:
-    docker:
-      - image: circleci/python:3.8
+    executor: aws-ec2/default
     steps:
       - checkout
       - run:
-          name: Deploy to Production
+          name: Install AWS CLI
           command: |
-            # Add your deployment commands or scripts here
-            # Test 2
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+      - run:
+          name: Deploy to EC2
+          command: |
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            aws configure set default.region us-west-2 # or your region
+            # Create or update your stack
+            aws ec2 run-instances --image-id <Windows_Server_2022_AMI_ID> --instance-type t2.micro # customize as needed
 workflows:
-  version: 2
-  deploy:
+  deploy_workflow:
     jobs:
-      - deploy:
-          filters:
-            branches:
-              only:
-                - main
+      - deploy
