@@ -11,7 +11,7 @@ jobs:
           command: |
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
-            sudo ./aws/install #test
+            sudo ./aws/install/awscliv2
       - run:
           name: Deploy to EC2
           command: |
